@@ -1,0 +1,38 @@
+<!--Emmetを利用しよう-->
+<!DOCTYPE html>
+<!--lang="ja": ブラウザ対して，このページが何語で書かれているかを伝える-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>TOEIC Typing Game</title>
+</head>
+
+<body>
+    <!-- スタート画面 -->
+    <div id="start-screen" style="display: block;">
+        <h1>TOEIC Typing Game</h1>
+        <button id="start-button">Start</button>
+    </div>
+
+    <!-- ゲーム画面 -->
+    <div id="playing-screen" style="display: none;">
+        <div id="timer">60</div>
+        <div id="word">---</div>
+        <input type="text" id="input-box" autocomplete="off" placeholder="ここに入力">
+        <div id="score">スコア: 0</div>
+    </div>
+
+    <!-- リザルト画面 -->
+    <div id="result-screen" style="display: none;">
+        <h2>ゲーム終了！</h2>
+        <div id="final-score">スコア: 0</div>
+        <button id="retry-button">Retry</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
