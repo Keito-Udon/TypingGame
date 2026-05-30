@@ -1,11 +1,5 @@
-const words = [
-    'ability', 'accept', 'account', 'achieve', 'address',
-    'adjust', 'advance', 'advice', 'affect', 'agree',
-    'allow', 'announce', 'apply', 'approve', 'arrange',
-    'assist', 'attach', 'attend', 'attract', 'available',
-];
-
 // ゲームの状態を管理する変数
+let words = [];
 let score = 0;
 let timeLeft = 60;
 let timerInterval = null;
@@ -22,6 +16,11 @@ const retryButton = document.getElementById('retry-button');
 // const playingScreen = document.getElementById('playing-screen');
 // const resultScreen = document.getElementById('result-screen');
 
+async function fetchWords() {
+    const response = await fetch('http://localhost:4000/api/game/words');
+    const json = await response.json();
+    return json.data.map(item => item.word);
+}
 
 // 画面遷移の関数
 function showScreen(showId) {
@@ -51,7 +50,9 @@ function tick() {
 }
 
 // ゲームを開始する関数
-function startGame() {
+async function startGame() {
+    words = await fetchWords();
+
     score = 0;
     timeLeft = 60;
     scoreDisplay.textContent = 'スコア: 0';
@@ -65,11 +66,23 @@ function startGame() {
 }
 
 // ゲームを終了する関数
-function endGame() {
+async function endGame() {
     clearInterval(timerInterval);
+
+    await fetch('http://localhost:4000/api/scores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            playerName: 'player',
+            score: score,
+            difficulty: 'normal'
+        })
+    });
+
     document.getElementById('final-score').textContent = 'スコア: ' + score;
     showScreen('result-screen');
 }
+
 
 
 // スタートボタンがクリックされたときの処理
@@ -98,6 +111,7 @@ inputBox.addEventListener('input', () => {
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && timerInterval != null) {
         // endGame();
+        clearInterval(timerInterval)
         showScreen('start-screen');
     }
 })
